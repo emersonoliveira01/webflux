@@ -1,5 +1,6 @@
 package com.example.webfluxcourse.controller.exceptions;
 
+import com.example.webfluxcourse.service.exception.ObjectNotFoundException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -12,6 +13,7 @@ import reactor.core.publisher.Mono;
 import java.time.LocalDateTime;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @ControllerAdvice
 public class ControllerExceptionHandler {
@@ -27,6 +29,21 @@ public class ControllerExceptionHandler {
                                 .error(BAD_REQUEST.getReasonPhrase())
                                 .path(request.getPath().toString())
                                 .message("Dup Key exception.")
+                        .build()));
+
+    }
+
+    @ExceptionHandler(ObjectNotFoundException.class)
+    public ResponseEntity<Mono<StandardError>> duplicateKeyException(ObjectNotFoundException exception,
+                                                                     ServerHttpRequest request) {
+
+        return ResponseEntity.status(NOT_FOUND)
+                .body(Mono.just(StandardError.builder()
+                        .timesTemp(LocalDateTime.now())
+                        .status(NOT_FOUND.value())
+                        .error(NOT_FOUND.getReasonPhrase())
+                        .path(request.getPath().toString())
+                        .message(exception.getMessage())
                         .build()));
 
     }
