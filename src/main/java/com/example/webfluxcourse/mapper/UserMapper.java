@@ -2,6 +2,7 @@ package com.example.webfluxcourse.mapper;
 
 import com.example.webfluxcourse.entity.User;
 import com.example.webfluxcourse.model.request.UserRequest;
+import com.example.webfluxcourse.model.response.UserResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.NullValueCheckStrategy;
@@ -16,4 +17,6 @@ public interface UserMapper {
 
     @Mapping(target = "id", ignore = true)
     User toUser(final UserRequest userRequest);
+
+    UserResponse toUserResponse(final User entity);
 }
